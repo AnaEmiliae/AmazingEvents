@@ -1,9 +1,38 @@
+let apiUrl = "https://mindhub-xj03.onrender.com/api/amazing"
 
 let inputText = ''
 //Traer dinamicamente las cards
 const card = document.getElementById('card_index')
-
 console.log(card_index)
+
+//funcion async
+async function getApi(){
+  try {
+    const response = await fetch(apiUrl);
+    const datos = await response.json();
+    let eventos = datos.events;
+    show_cards(eventos, card)
+    let checkboxs = document.querySelectorAll('input[type= checkbox]')
+    console.log(checkboxs);
+    checkboxs.forEach(checkbox => {checkbox.addEventListener('change', ()=>{
+      inputsChequeados = Array.from(checkboxs).filter(checkbox => checkbox.checked).map(input => input.value)
+      console.log(inputsChequeados);
+      filtrosCruzados(eventos)}
+)})
+
+search_input.addEventListener('keyup', () => {
+  inputText = search_input.value
+  filtrosCruzados(eventos)
+})
+
+
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+
+getApi()
 
 function show_cards(arrayCards, container){
 let fragment = document.createDocumentFragment()
@@ -12,7 +41,7 @@ if (inputText != "" && arraySearch.length == 0) {
   let div = document.createElement('div')
     div.classList.add("card")
     div.style.width = "18rem"
-    div.innerHTML = `<h5 class="card-title">No se encuentran coicidencias<h5>`
+    div.innerHTML = `<h5 class="card-title">No se encuentra ${inputText} en el catálogo<h5>`
     container.appendChild(div)
 }
 
@@ -35,7 +64,7 @@ for (let element of arrayCards){
 }
 container.appendChild(fragment)
 }
-show_cards(data.events, card)
+//show_cards(eventos, card)
 
 
 // contenedor de checkbox
@@ -69,13 +98,7 @@ function checkbox (array){
 
 checkbox(data.events)
 
-let checkboxs = document.querySelectorAll('input[type= checkbox]')
-console.log(checkboxs);
-checkboxs.forEach(checkbox => {checkbox.addEventListener('change', ()=>{
-  inputsChequeados = Array.from(checkboxs).filter(checkbox => checkbox.checked).map(input => input.value)
-  console.log(inputsChequeados);
-  filtrosCruzados(data.events)}
-)})
+
 function verificarSeleccion(arrayString, arrayDeObjectos) {
   if(arrayString.lenght == 0) return arrayDeObjectos
 
@@ -91,10 +114,7 @@ let arraySearch = []
 const search_input = document.getElementById("search_input")
 console.log(search_input);
 
-search_input.addEventListener('keyup', () => {
-  inputText = search_input.value
-  filtrosCruzados(data.events)
-})
+
 
 function texto(valor, arrayDeObjectos) {
   if(valor == "") return arrayDeObjectos 

@@ -1,14 +1,40 @@
+let apiUrl = "https://mindhub-xj03.onrender.com/api/amazing"
+
 let inputText = ''
+async function getApi(){
+  try {
+    const response = await fetch(apiUrl);
+    const datos = await response.json();
+    let eventos = datos.events;
+    categorias(eventos)
+    const up_coming = eventos.filter(elemento => Date.parse(elemento.date) > Date.parse(data.currentDate))
+    show_cards(up_coming,card_up)
+    
+    let checkboxs = document.querySelectorAll('input[type= checkbox]')
+    console.log(checkboxs);
+    checkboxs.forEach(checkbox => {
+      checkbox.addEventListener('change', ()=>{
+      inputsChequeados = Array.from(checkboxs).filter(checkbox => checkbox.checked).map(input => input.value)
+      console.log(inputsChequeados);
 
-let up_coming = data.events.filter(elemento => Date.parse(elemento.date) > Date.parse(data.currentDate))
-console.log(up_coming)
+filtrosCruzados(up_coming)
+})
+    })
 
-const card_up = document.getElementById('card_up')
+    const search_input = document.getElementById("search_input")
+    console.log(search_input);
+    
+    search_input.addEventListener('keyup', () => {
+      inputText = search_input.value
 
-
-//Traer dinamicamente las cards
-
-console.log(card_up)
+      filtrosCruzados(up_coming)
+    })
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+getApi()
 
 function show_cards(arrayCards, container){
 let fragment = document.createDocumentFragment()
@@ -40,10 +66,18 @@ for (let element of arrayCards){
 }
 container.appendChild(fragment)
 }
-show_cards(up_coming, card_up)
 
+function categorias(array) {
+  const arreglo = []
+  for (let element of array) {
+      let categoria = element.category
+      if (!arreglo.includes(categoria)) {
+          arreglo.push(categoria)
+      }
+  } console.log(arreglo);
+}
 
-// contenedor de checkbox
+//contenedor de checkbox
 
 const navCheckbox = document.getElementById('checkbox')
 
@@ -74,13 +108,11 @@ function checkbox (array){
 
 checkbox(data.events)
 
-let checkboxs = document.querySelectorAll('input[type= checkbox]')
-console.log(checkboxs);
-checkboxs.forEach(checkbox => {checkbox.addEventListener('change', ()=>{
-  inputsChequeados = Array.from(checkboxs).filter(checkbox => checkbox.checked).map(input => input.value)
-  console.log(inputsChequeados);
-  filtrosCruzados(data.events)}
-)})
+
+
+
+
+
 function verificarSeleccion(arrayString, arrayDeObjectos) {
   if(arrayString.lenght == 0) return arrayDeObjectos
 
@@ -93,13 +125,6 @@ function verificarSeleccion(arrayString, arrayDeObjectos) {
 let inputsChequeados = []
 let arraySearch = []
 
-const search_input = document.getElementById("search_input")
-console.log(search_input);
-
-search_input.addEventListener('keyup', () => {
-  inputText = search_input.value
-  filtrosCruzados(data.events)
-})
 
 function texto(valor, arrayDeObjectos) {
   if(valor == "") return arrayDeObjectos 
@@ -113,10 +138,10 @@ function filtrosCruzados(array) {
 
   arraySearch = texto(inputText,nuevaSeleccion)
   console.log(arraySearch);
-  show_cards(arraySearch, card)
+  show_cards(arraySearch, card_up)
 
 }
-
+  
 
 
 

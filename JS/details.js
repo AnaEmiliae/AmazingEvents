@@ -1,8 +1,42 @@
-const id = new URLSearchParams(location.search).get("id")
+let apiUrl = "https://mindhub-xj03.onrender.com/api/amazing"
 
-const cartas = data.events.find(elemento => elemento._id == id)
+fetch(apiUrl)
+
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+
+    // Al igual que en Index, past_events y upcoming. Coloqué contenedor y las variables y el llamado a la funcion.
+
+    const id = new URLSearchParams(location.search).get("id")
+    const cartas = data.events.find(elemento => elemento._id == id)
+    createCard(cartas)
+
+  })
+  .catch(error => console.log(error))
+  
+
+/*const id = new URLSearchParams(location.search).get("id")
+
+async function getApi(){
+  try {
+    const response = await fetch(apiUrl);
+    const datos = await response.json();
+    let eventos = datos.events;
+    createCard(card)
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+
+getApi()
+
+
+
+const cartas = eventos.find(elemento => elemento._id == id)
 console.log(cartas)
-createCard(cartas)
+createCard(cartas)*/
 
 function createCard(card) {
     const card_details = document.getElementById("card_details")
